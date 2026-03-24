@@ -1,1 +1,34 @@
-# adiservers
+serverrequest: 
+ accept&if: serverid=C63F92D1
+ else: ban-ip
+
+api:
+import https://adiservers-pro.webnode.hu
+import serverip
+set %serverip% = fileip
+
+get ip 'https://adiservers-pro.webnode.hu' & set mainwebip
+get ip 'fileip' & set fileserverip
+  if %mainwebip% != fileserverip
+    set level=running
+  else
+    set level=error
+set %fileserverip% = linuxprocess
+
+get apikey
+set permkey = "C63F92D"
+set "apikey" / "permkey" *70 /3,3 = tempkey
+   if %tempkey% != %tempkey%
+    set level1=error
+   else 
+    set level1=running
+
+#ERRORLEVEL
+:errorlevel
+  if %level%=error 
+    say SYSTEM ERROR! shutdowning...
+    kill %linuxprocess%
+  if %level1%=error 
+    say SYSTEM ERROR! shutdowning...
+    run error.sh >%linuxprocess% & wearecooked.exe >%windowsbackend%
+    kill %linuxprocess%
